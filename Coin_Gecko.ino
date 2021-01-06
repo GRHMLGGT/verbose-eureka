@@ -23,8 +23,8 @@ U8G2_SSD1306_128X64_NONAME_F_HW_I2C     u8g2(U8G2_R0, 16, 15, 4);
 
 //Constants and Variables----------------------------|
 
-char            chPassword[] = "oldman 1952";
-char            chSSID[] = "Winterfell";
+char            chPassword[] = "FridayThe13th";
+char            chSSID[] = "KyleAndLexie";
 
 char            chBuffer[128];
 
@@ -109,18 +109,11 @@ void loop() {
   {
     HTTPClient http;
 
-    http.begin ("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum&vs_currencies=eur%2Cgbp%2Cusd&include_24hr_change=true");
+    http.begin ("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd%2Ccad&include_24hr_change=true");
     int httpCode = http.GET();
-
-    if (httpCode > 0) {
-
-    }
 
     Serial.println ("\nStatuscode: " + String(httpCode));
     delay (100);
-
-
-
 
     const size_t capacity = JSON_OBJECT_SIZE(2) + 2 * JSON_OBJECT_SIZE(6) + 150;
     DynamicJsonDocument doc(capacity);
@@ -131,59 +124,25 @@ void loop() {
     deserializeJson(doc, json);
 
     JsonObject bitcoin = doc["bitcoin"];
-    float bitcoin_eur = bitcoin["eur"]; // 9473.3
-    float bitcoin_eur_24h_change = bitcoin["eur_24h_change"]; // 11.379516678954898
-    float bitcoin_gbp = bitcoin["gbp"]; // 8642.89
-    float bitcoin_gbp_24h_change = bitcoin["gbp_24h_change"]; // 11.58637677393075
-    float bitcoin_usd = bitcoin["usd"]; // 11140.6
-    float bitcoin_usd_24h_change = bitcoin["usd_24h_change"]; // 12.464050392648252
-
-    JsonObject ethereum = doc["ethereum"];
-    float ethereum_eur = ethereum["eur"]; // 276.02
-    float ethereum_eur_24h_change = ethereum["eur_24h_change"]; // 3.5689620753981264
-    float ethereum_gbp = ethereum["gbp"]; // 251.82
-    float ethereum_gbp_24h_change = ethereum["gbp_24h_change"]; // 3.7613159836416026
-    float ethereum_usd = ethereum["usd"]; // 324.6
-    float ethereum_usd_24h_change = ethereum["usd_24h_change"]; // 4.577442219792744
-
+    float bitcoin_cad = bitcoin["cad"];
+    float bitcoin_cad_24h_change = bitcoin["cad_24h_change"];
+    float bitcoin_usd = bitcoin["usd"];
+    float bitcoin_usd_24h_change = bitcoin["usd_24h_change"];
 
 
     Serial.println("-------------------------------");
 
-    Serial.print("EUR: ");
-    Serial.println(bitcoin_eur);
-    Serial.print("EUR 24hr %: ");
-    Serial.println(bitcoin_eur_24h_change);
-
-    Serial.print("GBP: ");
-    Serial.println(bitcoin_gbp);
-    Serial.print("GBP 24hr %: ");
-    Serial.println(bitcoin_gbp_24h_change);
+    Serial.print("CAD: ");
+    Serial.println(bitcoin_cad);
+    Serial.print("CAD 24hr %: ");
+    Serial.println(bitcoin_cad_24h_change);
 
     Serial.print("USD: ");
     Serial.println(bitcoin_usd);
     Serial.print("USD 24hr %: ");
     Serial.println(bitcoin_usd_24h_change);
 
-    Serial.print("EUR: ");
-    Serial.println(ethereum_eur);
-    Serial.print("EUR 24hr %: ");
-    Serial.println(ethereum_eur_24h_change);
-
-    Serial.print("GBP: ");
-    Serial.println(ethereum_gbp);
-    Serial.print("GBP 24hr %: ");
-    Serial.println(ethereum_gbp_24h_change);
-
-    Serial.print("USD: ");
-    Serial.println(ethereum_usd);
-    Serial.print("USD 24hr %: ");
-    Serial.println(ethereum_usd_24h_change);
-
     Serial.println("-------------------------------");
-
-
-
 
     //Screen Outputs----------------------------|
 
@@ -194,55 +153,25 @@ void loop() {
     u8g2.setCursor(0, 0);
     u8g2.print("Bitcoin: ");
 
-
-    u8g2.setCursor(0, 10);
-    u8g2.print("EUR: ");
-    u8g2.print(bitcoin_eur, 0);
     u8g2.setCursor(0, 20);
-    u8g2.print("EUR: 24hr ");
-    u8g2.print(bitcoin_eur_24h_change);
-    u8g2.print(" %");
-
-    
-
+    u8g2.print("USD: ");
+    u8g2.print(bitcoin_usd, 0);
     u8g2.setCursor(0, 30);
-    u8g2.print("Ethereum: ");
-    
-    u8g2.setCursor(0, 40);
-    u8g2.print("EUR: ");
-    u8g2.print(ethereum_eur, 0);
-    u8g2.setCursor(0, 50);
-    u8g2.print("EUR: 24hr ");
-    u8g2.print(ethereum_eur_24h_change);
+    u8g2.print("USD: 24hr ");
+    u8g2.print(bitcoin_usd_24h_change);
     u8g2.print(" %");
-
-
-
-
-
-    //u8g2.setCursor(0, 20);
-    //u8g2.print("USD: ");
-    //u8g2.print(bitcoin_usd, 0);
-    //u8g2.setCursor(0, 30);
-    //u8g2.print("USD: 24hr ");
-    //u8g2.print(bitcoin_usd_24h_change);
-    //u8g2.print(" %");
-    //u8g2.setCursor(0, 40);
-    //u8g2.print("GBP: ");
-    //u8g2.print(bitcoin_gbp, 0);
-    //u8g2.setCursor(0, 50);
-    //u8g2.print("GBP: 24hr ");
-    //u8g2.print(bitcoin_gbp_24h_change);
-    //u8g2.print(" %");
-
+    u8g2.setCursor(0, 40);
+    u8g2.print("CAD: ");
+    u8g2.print(bitcoin_cad, 0);
+    u8g2.setCursor(0, 50);
+    u8g2.print("CAD: 24hr ");
+    u8g2.print(bitcoin_cad_24h_change);
+    u8g2.print(" %");
 
     u8g2.sendBuffer();
 
-
     http.end();
 
-
-
-    delay(10000); //  seconds to update.
+    delay(10000); // 10 seconds to update.
   }
 }
