@@ -163,7 +163,7 @@ void loop() {
     Serial.print("USD: ");
     Serial.println(bitcoin_usd);
     Serial.print("USD 24hr %: ");
-    Serial.println(bitcoin_gbp_24h_change);
+    Serial.println(bitcoin_usd_24h_change);
 
     Serial.print("EUR: ");
     Serial.println(ethereum_eur);
